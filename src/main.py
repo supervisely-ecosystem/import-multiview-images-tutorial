@@ -17,13 +17,14 @@ IMAGES_DIR = "src/images"
 project = api.project.create(workspace_id, "Grouped cars", change_name_if_conflict=True)
 dataset = api.dataset.create(project.id, "ds0")
 
+# enable multiview settings for project
+api.project.set_multiview_settings(project.id)
 
 # ======================================================================================
 # ======================================================================================
 # ======================================================================================
 # OPTION 1: upload images as a group (recommended)
 
-api.project.set_multiview_settings(project.id)
 for group_name in os.listdir(IMAGES_DIR):
     group_dir = os.path.join(IMAGES_DIR, group_name)
     if not os.path.isdir(group_dir):
@@ -38,18 +39,9 @@ for group_name in os.listdir(IMAGES_DIR):
 # OPTION 2: upload images, add tags
 
 TAG_NAME = "multiview"
-# get project meta
-project_meta = sly.ProjectMeta.from_json(api.project.get_meta(project.id))
-
-tag_meta = sly.TagMeta(TAG_NAME, sly.TagValueType.ANY_STRING)
-project_meta = project_meta.add_tag_meta(new_tag_meta=tag_meta)
-api.project.update_meta(id=project.id, meta=project_meta)
-
-api.project.images_grouping(project.id, enable=True, tag_name=TAG_NAME)
-
 # get project meta from server and tag meta (we will need it later)
-project_meta_from_server = sly.ProjectMeta.from_json(api.project.get_meta(project.id))
-tag_meta = project_meta_from_server.get_tag_meta(TAG_NAME)
+project_meta = sly.ProjectMeta.from_json(api.project.get_meta(project.id))
+tag_meta = project_meta.get_tag_meta(TAG_NAME)
 
 # upload images to Supervisely
 for group_name in os.listdir(IMAGES_DIR):
