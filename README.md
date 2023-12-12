@@ -4,17 +4,13 @@
 
 This easy-to-follow tutorial will show you how to upload multiview images to Supervisely using Python SDK and get the advantage of the grouped view in the labeling interface, which allows you to label images quickly and efficiently on one screen.
 
-{% hint style="info" %}
-You can also import grouped images using [Import Images Groups](https://ecosystem.supervisely.com/apps/import-images-groups) app from Supervisely Ecosystem.
-{% endhint %}
+> You can also import grouped images using [Import Images Groups](https://ecosystem.supervisely.com/apps/import-images-groups) app from Supervisely Ecosystem.
 
 You will learn how to enable multiview in the project settings, upload grouped images and explore the grouped view in the labeling interface.
 
 ## How to debug this tutorial
 
-{% hint style="info" %}
-Everything you need to reproduce [this tutorial is on GitHub](https://github.com/supervisely-ecosystem/import-multiview-images-tutorial): source code and additional app files.
-{% endhint %}
+> Everything you need to reproduce [this tutorial is on GitHub](https://github.com/supervisely-ecosystem/import-multiview-images-tutorial): source code and additional app files.
 
 **Step 1.** Prepare `~/supervisely.env` file with credentials. [Learn more here.](https://developer.supervisely.com/getting-started/basics-of-authentication)
 
@@ -42,12 +38,10 @@ WORKSPACE_ID=942 # ⬅️ change value
 
 **Step 5.** Start debugging `src/main.py`.
 
-{% hint style="info" %}
-Supervisely instance version >= 6.8.54\
-Supervisely SDK version >= 6.72.213\
+> Supervisely instance version >= 6.8.54
+> Supervisely SDK version >= 6.72.213
 
 In the tutorial, Supervisely Python SDK version is not directly defined in the requirements.txt. But when developing your app, we recommend defining the SDK version in the requirements.txt.
-{% endhint %}
 
 ### Import libraries
 
