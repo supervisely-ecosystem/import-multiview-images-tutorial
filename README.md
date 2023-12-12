@@ -38,7 +38,7 @@ WORKSPACE_ID=942 # ⬅️ change value
 
 **Step 5.** Start debugging `src/main.py`.
 
-> Supervisely instance version >= 6.8.54
+> Supervisely instance version >= 6.8.54\
 > Supervisely SDK version >= 6.72.213
 
 In the tutorial, Supervisely Python SDK version is not directly defined in the requirements.txt. But when developing your app, we recommend defining the SDK version in the requirements.txt.
@@ -111,8 +111,6 @@ dataset = api.dataset.create(project.id, "ds0")
 ```
 
 ## Enable multiview in the project settings
-
-You can do it in 3 ways:
 
 ```python
 api.project.set_multiview_settings(project.id)
