@@ -1,11 +1,9 @@
 {
+  "python.defaultInterpreterPath": ".venv/bin/python",
   "files.exclude": {
     "**/__pycache__": true,
-    "build": true,
-    "supervisely.egg-info": true,
     ".venv": true
   },
-  "python.defaultInterpreterPath": ".venv/bin/python",
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
   "editor.formatOnType": true,
@@ -24,12 +22,5 @@
     }
   },
   "isort.args": ["--profile", "black"],
-  "debug.inlineValues": "off",
-  "python.analysis.typeCheckingMode": "off",
-  "python.analysis.autoImportCompletions": false,
-  "autoDocstring.docstringFormat": "sphinx",
-  "autoDocstring.customTemplatePath": "docs/.mustache",
-  "python.testing.pytestArgs": ["tests/inference_cache"],
-  "python.testing.unittestEnabled": false,
-  "python.testing.pytestEnabled": true
+  "debug.inlineValues": "off"
 }
