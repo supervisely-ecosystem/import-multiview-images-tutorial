@@ -53,7 +53,7 @@ from dotenv import load_dotenv
 import supervisely as sly
 ```
 
-### Load variables from environment
+### Load environment variables
 
 ```python
 if sly.is_development():
@@ -69,13 +69,9 @@ workspace_id = sly.env.workspace_id()
 api = sly.Api.from_env()
 ```
 
-### Specify the path to the directory with images
+### Explore the directory with images
 
-```python
-IMAGES_DIR = "src/images"
-```
-
-here is the structure of the directory with images:
+here is the structure of the directory with images (`src/images`):
 
 ```text
  📂 images
@@ -116,46 +112,58 @@ dataset = api.dataset.create(project.id, "ds0")
 api.project.set_multiview_settings(project.id)
 ```
 
-There are 2 more ways to enable multiview in the project settings:
+You can also enable multiview in the Image Labeling Tool interface:
 
-- in the project settings (create tag and enable the `Group Images mode` option and select the tag you created)
-- in the Image Laleling Tool (enable `Group Images by Tag` mode in the `More` menu and select the tag you created before)
+![enable_multiview](https://github.com/supervisely-ecosystem/import-multiview-images-tutorial/assets/79905215/6c45e0d4-a79d-4cac-a529-f1be25e4b058)
 
 And now we're ready to upload images.
 
-## How to upload grouped images (recommended way)
+## How to upload multiview images
 
-In this tutorial, we'll be using the `api.image.upload_multiview_images` method to upload images groups to Supervisely.
+In this tutorial, we'll be using the `api.image.upload_multiview_images` method to upload grouped images to Supervisely.
 
 ```python
-for group_name in os.listdir(IMAGES_DIR):
-    group_dir = os.path.join(IMAGES_DIR, group_name)
-    if not os.path.isdir(group_dir):
-        continue
-    images_paths = sly.fs.list_files(group_dir, valid_extensions=sly.image.SUPPORTED_IMG_EXTS)
-
-    api.image.upload_multiview_images(dataset.id, group_name, images_paths)
+def upload_multiview_images(
+    dataset_id: int,
+    group_name: str,
+    paths: List[str],
+    metas: Optional[List[Dict]] = None,
+    progress_cb: Optional[Union[tqdm, Callable]] = None,
+) -> List[ImageInfo]:
 ```
 
-| Parameters  |                Type                 |               Description               |
-| :---------: | :---------------------------------: | :-------------------------------------: |
-| dataset_id  |                 int                 |       ID of the dataset to upload       |
-| group_name  |                 str                 |      Name of the group (tag value)      |
-|    paths    |  List\[str\] (paths to the images)  |       List of paths to the images       |
-|    names    |  List\[str\] (names of the images)  | List of names for the images (optional) |
-|    metas    | List\[Dict\] (metas of the images)  |     List of image metas (optional)      |
-| progress_cb | Optional\[Union\[tqdm, Callable\]\] | Function for tracking upload progress.  |
+| Parameters  |                Type                 |              Description               |
+| :---------: | :---------------------------------: | :------------------------------------: |
+| dataset_id  |                 int                 |      ID of the dataset to upload       |
+| group_name  |                 str                 |     Name of the group (tag value)      |
+|    paths    |  List\[str\] (paths to the images)  |      List of paths to the images       |
+|    metas    | List\[Dict\] (metas of the images)  |     List of image metas (optional)     |
+| progress_cb | Optional\[Union\[tqdm, Callable\]\] | Function for tracking upload progress. |
 
 So, the method uploads images to Supervisely and returns a list of `ImageInfo` objects.
+
+## Upload multiview images
+
+```python
+for group_dir in os.scandir("src/images"):
+    if not group_dir.is_dir():
+        continue
+    images_paths = sly.fs.list_files(group_dir.path, valid_extensions=sly.image.SUPPORTED_IMG_EXTS)
+
+    api.image.upload_multiview_images(dataset.id, group_dir.name, images_paths)
+```
 
 ## Grouped view in the labeling interface
 
 So now, that we've uploaded all the images, let's take a look at the labeling interface.
 
-![Grouped view in the labeling interface](https://github.com/supervisely-ecosystem/import-multiview-images-tutorial/assets/79905215/772d1ca4-763f-4c77-bbd8-422d8e50f9ad)
+![Grouped view in the labeling interface](https://github.com/supervisely-ecosystem/import-multiview-images-tutorial/assets/79905215/f8b7203a-cfbd-4771-a76e-22086d7b0d18)
 
-As you can see, all the images are grouped by the name of the group, which is the name of the image we passed to the `group_name` parameter.
-Note that the images are grouped by the tag value, not by the tag name.
+As you can see, the images in the Labeling tool are grouped in the same way as in your images in folders (images from one folder are combined into one group). When importing, each image from the folders will be assigned tags with the same values, which allows them to be grouped into one group.
+
+Multiview labeling can be very useful when annotating objects of multiple classes simultaneously on several images. You don't need to shift your attention to find the necessary class every time you switch between images, allowing you to increase efficiency and save time and effort.
+
+![Multiview labeling](https://github.com/supervisely-ecosystem/import-multiview-images-tutorial/assets/79905215/772d1ca4-763f-4c77-bbd8-422d8e50f9ad)
 
 ## Summary
 
